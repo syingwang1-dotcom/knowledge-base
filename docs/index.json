@@ -70,6 +70,17 @@
     "summary": "训练 = 教模型(贵,要海量算力);推理 = 用模型(便宜,每次调用都有成本)。两者都吃 GPU。"
   },
   {
+    "name": "向量数据库",
+    "aliases": [
+      "Vector DB",
+      "向量检索"
+    ],
+    "slug": "vector-database",
+    "topic": "ai",
+    "topicLabel": "AI / 大模型",
+    "summary": "向量数据库是一种专门用来存储和查找'向量'的数据库，能快速找到最相似的内容，是AI记忆和检索的关键技术。"
+  },
+  {
     "name": "GPU 云 / 算力租赁",
     "aliases": [
       "GPU云",

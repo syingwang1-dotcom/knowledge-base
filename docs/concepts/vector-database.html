@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI / 大模型 · 我的知识库</title><style>
+<title>向量数据库 · 我的知识库</title><style>
 :root{--bg:#0f1115;--card:#171a22;--card2:#1d212c;--text:#e5e7eb;--muted:#9aa3b2;--accent:#60a5fa;--green:#34d399;--orange:#fb923c;--border:#262b38;--radius:12px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:16px}
@@ -51,40 +51,17 @@ label{color:var(--muted);font-size:14px;display:block;margin:14px 0 4px}
 </style></head>
 <body>
 <header class="sitehead"><div class="wrap head">
-  <a class="brand" href="../index.html">📚 我的知识库</a>
-  <nav class="nav"><a class="" href="../index.html">首页</a><a class="active" href="../topics/ai.html">AI / 大模型</a><a class="" href="../topics/cloud.html">云计算</a><a class="" href="../topics/sales.html">销售 / GTM</a><a class="" href="../topics/business.html">商业 / 其他</a><a class="" href="../add.html">➕ 添加</a></nav>
+  <a class="brand" href="../../index.html">📚 我的知识库</a>
+  <nav class="nav"><a class="" href="../../index.html">首页</a><a class="active" href="../../topics/ai.html">AI / 大模型</a><a class="" href="../../topics/cloud.html">云计算</a><a class="" href="../../topics/sales.html">销售 / GTM</a><a class="" href="../../topics/business.html">商业 / 其他</a><a class="" href="../../add.html">➕ 添加</a></nav>
 </div></header>
 <main class="wrap">
-<h1>AI / 大模型</h1>
-<p class="meta">大模型、Token、RAG、Agent 与算力落地 · 共 7 条</p>
-<div class="grid">
-  <a class="card" href="../concepts/agent.html">
-    <h3>Agent (智能体)</h3>
-    <p>能自己拆任务、调工具、分几步把一件事做完的 AI,比"聊天机器人"进了一步。</p>
-  </a>
-  <a class="card" href="../concepts/fine-tuning.html">
-    <h3>微调 (Fine-tuning)</h3>
-    <p>用你自己的少量数据,给通用大模型"补课",让它更懂你的行业。</p>
-  </a>
-  <a class="card" href="../concepts/llm.html">
-    <h3>大模型 (LLM)</h3>
-    <p>用海量文字"喂"出来、能像人一样理解和生成语言的 AI,是近两年 AI 热潮的主角。</p>
-  </a>
-  <a class="card" href="../concepts/rag.html">
-    <h3>RAG (检索增强生成)</h3>
-    <p>让大模型回答前先"翻你公司的资料库",再作答,防止它凭空胡编。</p>
-  </a>
-  <a class="card" href="../concepts/token.html">
-    <h3>Token</h3>
-    <p>AI 处理文字的"最小计量单位",也是你按用量付钱的方式(约 1 汉字 ≈ 1~2 Token,1 英文单词 ≈ 1~2 Token)。</p>
-  </a>
-  <a class="card" href="../concepts/training-vs-inference.html">
-    <h3>训练与推理</h3>
-    <p>训练 = 教模型(贵,要海量算力);推理 = 用模型(便宜,每次调用都有成本)。两者都吃 GPU。</p>
-  </a>
-  <a class="card" href="../concepts/vector-database.html">
-    <h3>向量数据库</h3>
-    <p>向量数据库是一种专门用来存储和查找'向量'的数据库，能快速找到最相似的内容，是AI记忆和检索的关键技术。</p>
-  </a></div></main>
+<div class="chips"><a class="chip topic" href="../../topics/ai.html">AI / 大模型</a><span class="chip">Vector DB</span><span class="chip">向量检索</span></div>
+<h1>向量数据库</h1>
+<div class="meta">收录于 2026-08-24 · 更新于 2026-08-24</div>
+<h2>一句话</h2><p>向量数据库是一种专门用来存储和查找'向量'的数据库，能快速找到最相似的内容，是AI记忆和检索的关键技术。</p><h2>大白话解释</h2><p>想象你有一本巨大的相册，里面有几百万张照片。你想找一张和某张照片最像的，普通办法是一张张翻，很慢。向量数据库就像给每张照片提取了一串'特征码'（比如颜色、构图、人物），然后把这些特征码放在一个特殊的索引里。当你拿一张新照片的特征码去比对时，它能立刻告诉你哪几张最相似。</p><p>在AI里，文字、图片、声音都可以被转换成这种特征码（也就是'向量'）。大模型回答问题需要参考很多资料，这些资料就可以提前转成向量存进向量数据库。当你提问时，系统先把问题变成向量，再去数据库里快速找出最相关的资料，然后交给大模型生成答案。这样既快又准，还省token。</p><p>简单说，向量数据库就是给AI配的一个'超级大脑记忆库'，让它能随时找到最相关的信息。</p><h2>销售话术版</h2><p>“您知道吗？大模型再聪明，如果它的记忆库是个乱糟糟的仓库，找信息就会又慢又费钱。我们的向量数据库就像给这个仓库装上了'智能高速检索'，让AI回答又快又准，还能节省计算成本。比如，您做智能客服，有了它，客户问什么，系统瞬间找到最相关的知识，客户体验直线提升，运营成本反而下降。”</p><h2>备注</h2><ul><li>向量数据库通常和RAG（检索增强生成）配合使用，能提升大模型回答的准确性和时效性。</li><li>销售时强调业务价值：速度快（用户体验）、准（满意度）、省（成本）。</li></ul>
+<div class="sec-title">相关概念</div>
+<div class="chips"><a class="chip" href="../concepts/rag.html">RAG (检索增强生成)</a><a class="chip" href="../concepts/llm.html">大模型 (LLM)</a><a class="chip" href="../concepts/token.html">Token</a></div>
+<div class="sec-title">来源</div>
+<ul class="meta"><li>Issue #1</li></ul></main>
 <footer class="wrap foot">由 <code>scripts/build.mjs</code> 生成 · 更新于 2026-08-24 · 个人学习用</footer>
 </body></html>
