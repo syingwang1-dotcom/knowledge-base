@@ -53,6 +53,23 @@ updated: 2026-08-24
 
 > 加完 2-3 个词条,`related` 记得互相指向,反链才会长成网。
 
+## 全自动投喂(手机/网页都能用)
+
+网站「添加概念」页 → 提交 → 自动生成词条并上线:
+
+```
+手机/电脑 → 网站 add.html 投喂表单 → 预填 GitHub Issue([词条] 开头)
+  → GitHub Actions 自动:抓取文章 → 调大模型(DeepSeek)生成词条
+  → 写入 concepts/ → 重建站点 → 自动上线 → 回帖并关闭 Issue
+```
+
+**前提(一次性配置)**:
+1. 在 platform.deepseek.com 注册并创建 API key;
+2. 仓库 Settings → Secrets and variables → Actions → 新建 `LLM_API_KEY`;
+3. 之后任何以 `[词条]` 开头的 Issue 都会被自动处理。
+
+**抓取失败兜底**:复杂页面(反爬/需登录)抓不到时,系统会在 Issue 留言,把正文粘贴到 Issue body 即可。
+
 ## 如何部署(GitHub Pages)
 
 ```bash
