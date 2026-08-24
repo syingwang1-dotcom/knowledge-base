@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IaaS / PaaS / SaaS · 我的知识库</title><style>
+:root{--bg:#0f1115;--card:#171a22;--card2:#1d212c;--text:#e5e7eb;--muted:#9aa3b2;--accent:#60a5fa;--green:#34d399;--orange:#fb923c;--border:#262b38;--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:16px}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+header.sitehead{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px 0}
+.brand{font-size:18px;font-weight:700;color:var(--text);text-decoration:none}
+.nav{display:flex;flex-wrap:wrap;gap:6px}
+.nav a{padding:5px 12px;border-radius:999px;color:var(--muted);text-decoration:none;font-size:14px;transition:.15s}
+.nav a:hover{color:var(--text);background:var(--card2)}
+.nav a.active{background:var(--accent);color:#0b1220;font-weight:600}
+main{padding:28px 0 60px}
+h1{font-size:26px;margin:8px 0 14px}
+h2{font-size:20px;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+h3{font-size:17px;margin:20px 0 8px}
+p{margin:10px 0}
+ul{margin:10px 0 10px 22px}
+li{margin:5px 0}
+a{color:var(--accent)}
+code{background:var(--card2);padding:2px 6px;border-radius:5px;font-size:.9em}
+blockquote{border-left:3px solid var(--accent);background:var(--card);padding:10px 14px;border-radius:8px;margin:12px 0;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{display:inline-block;padding:3px 11px;border-radius:999px;font-size:13px;background:var(--card2);color:var(--muted);border:1px solid var(--border);text-decoration:none}
+.chip.topic{background:rgba(96,165,250,.14);color:var(--accent);border-color:transparent}
+.meta{color:var(--muted);font-size:13px;margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-decoration:none;color:var(--text);transition:.15s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card h3{font-size:16px;margin:0 0 6px}
+.card p{color:var(--muted);font-size:14px;margin:0}
+.hero{background:linear-gradient(135deg,rgba(96,165,250,.12),rgba(52,211,153,.08));border:1px solid var(--border);border-radius:var(--radius);padding:26px;margin-bottom:24px}
+.hero h1{margin:0 0 8px}
+.hero p{color:var(--muted);margin:0}
+.search{width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:15px;margin:14px 0}
+.search:focus{outline:none;border-color:var(--accent)}
+#results{margin-top:6px}
+.result{display:block;padding:10px 12px;border-radius:8px;color:var(--text);text-decoration:none;border:1px solid var(--border);background:var(--card);margin-bottom:8px}
+.result:hover{border-color:var(--accent)}
+.result .t{font-weight:600}
+.result .s{color:var(--muted);font-size:13px;margin-top:2px}
+.sec-title{font-size:18px;font-weight:600;margin:26px 0 12px}
+.foot{color:var(--muted);font-size:13px;padding:20px 0 40px;border-top:1px solid var(--border)}
+</style></head>
+<body>
+<header class="sitehead"><div class="wrap head">
+  <a class="brand" href="../../index.html">📚 我的知识库</a>
+  <nav class="nav"><a class="" href="../../index.html">首页</a><a class="" href="../../topics/ai.html">AI / 大模型</a><a class="active" href="../../topics/cloud.html">云计算</a><a class="" href="../../topics/sales.html">销售 / GTM</a><a class="" href="../../topics/business.html">商业 / 其他</a></nav>
+</div></header>
+<main class="wrap">
+<div class="chips"><a class="chip topic" href="../../topics/cloud.html">云计算</a><span class="chip">云三层</span><span class="chip">IaaS</span><span class="chip">PaaS</span><span class="chip">SaaS</span><span class="chip">基础设施即服务</span></div>
+<h1>IaaS / PaaS / SaaS</h1>
+<div class="meta">收录于 2026-08-24 · 更新于 2026-08-24</div>
+<h2>一句话</h2><p>云服务按"你管多少、云管多少"分三层:租服务器(IaaS)、租平台(PaaS)、租成品软件(SaaS)。</p><h2>大白话解释</h2><p>像租房:</p><ul><li><strong>IaaS</strong>(基础设施即服务)= 毛坯房:只给你硬件(服务器、存储、网络),系统、软件、运维自己管;</li><li><strong>PaaS</strong>(平台即服务)= 精装房:连开发环境、数据库都配好,你只写业务;</li><li><strong>SaaS</strong>(软件即服务)= 酒店:啥都别管,入住即用,按年付钱。</li><li>大模型按 API 调用卖,本质也是一种"软件即服务"。</li></ul><h2>销售话术版</h2><p>先问客户"你们有多少技术人员",再决定卖哪层:</p><blockquote>你们 IT 团队强,我建议 IaaS + PaaS,便宜又灵活;团队小,直接上 SaaS,省运维。</blockquote><p>卖错层是销售大忌——把 IaaS 卖给没 IT 的客户,等于让他自己盖毛坯房。</p><h2>备注</h2><p>百度智能云、阿里云、华为云都是"全栈"(三层都做),但靠 IaaS 起家、靠上层赚钱。</p>
+<div class="sec-title">相关概念</div>
+<div class="chips"><a class="chip" href="../concepts/maas.html">MaaS (模型即服务)</a><a class="chip" href="../concepts/gpu-cloud.html">GPU 云 / 算力租赁</a><a class="chip" href="../concepts/private-deployment.html">私有化部署 / 一体机</a></div>
+<div class="sec-title">来源</div>
+<ul class="meta"><li><a href="https://mp.weixin.qq.com/s/2i6hrJ5a4PCKPUw9fORBgg" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/2i6hrJ5a4PCKPUw9fORBgg</a></li></ul></main>
+<footer class="wrap foot">由 <code>scripts/build.mjs</code> 生成 · 更新于 2026-08-24 · 个人学习用</footer>
+</body></html>

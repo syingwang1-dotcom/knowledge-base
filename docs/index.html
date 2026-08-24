@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>首页 · 我的知识库</title><style>
+:root{--bg:#0f1115;--card:#171a22;--card2:#1d212c;--text:#e5e7eb;--muted:#9aa3b2;--accent:#60a5fa;--green:#34d399;--orange:#fb923c;--border:#262b38;--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:16px}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px}
+header.sitehead{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px 0}
+.brand{font-size:18px;font-weight:700;color:var(--text);text-decoration:none}
+.nav{display:flex;flex-wrap:wrap;gap:6px}
+.nav a{padding:5px 12px;border-radius:999px;color:var(--muted);text-decoration:none;font-size:14px;transition:.15s}
+.nav a:hover{color:var(--text);background:var(--card2)}
+.nav a.active{background:var(--accent);color:#0b1220;font-weight:600}
+main{padding:28px 0 60px}
+h1{font-size:26px;margin:8px 0 14px}
+h2{font-size:20px;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+h3{font-size:17px;margin:20px 0 8px}
+p{margin:10px 0}
+ul{margin:10px 0 10px 22px}
+li{margin:5px 0}
+a{color:var(--accent)}
+code{background:var(--card2);padding:2px 6px;border-radius:5px;font-size:.9em}
+blockquote{border-left:3px solid var(--accent);background:var(--card);padding:10px 14px;border-radius:8px;margin:12px 0;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{display:inline-block;padding:3px 11px;border-radius:999px;font-size:13px;background:var(--card2);color:var(--muted);border:1px solid var(--border);text-decoration:none}
+.chip.topic{background:rgba(96,165,250,.14);color:var(--accent);border-color:transparent}
+.meta{color:var(--muted);font-size:13px;margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-decoration:none;color:var(--text);transition:.15s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card h3{font-size:16px;margin:0 0 6px}
+.card p{color:var(--muted);font-size:14px;margin:0}
+.hero{background:linear-gradient(135deg,rgba(96,165,250,.12),rgba(52,211,153,.08));border:1px solid var(--border);border-radius:var(--radius);padding:26px;margin-bottom:24px}
+.hero h1{margin:0 0 8px}
+.hero p{color:var(--muted);margin:0}
+.search{width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:15px;margin:14px 0}
+.search:focus{outline:none;border-color:var(--accent)}
+#results{margin-top:6px}
+.result{display:block;padding:10px 12px;border-radius:8px;color:var(--text);text-decoration:none;border:1px solid var(--border);background:var(--card);margin-bottom:8px}
+.result:hover{border-color:var(--accent)}
+.result .t{font-weight:600}
+.result .s{color:var(--muted);font-size:13px;margin-top:2px}
+.sec-title{font-size:18px;font-weight:600;margin:26px 0 12px}
+.foot{color:var(--muted);font-size:13px;padding:20px 0 40px;border-top:1px solid var(--border)}
+</style></head>
+<body>
+<header class="sitehead"><div class="wrap head">
+  <a class="brand" href="index.html">📚 我的知识库</a>
+  <nav class="nav"><a class="active" href="index.html">首页</a><a class="" href="topics/ai.html">AI / 大模型</a><a class="" href="topics/cloud.html">云计算</a><a class="" href="topics/sales.html">销售 / GTM</a><a class="" href="topics/business.html">商业 / 其他</a></nav>
+</div></header>
+<main class="wrap">
+<div class="hero">
+  <h1>📚 我的知识库</h1>
+  <p>把播客、报道里听不懂的词,变成我能讲给客户听的话。<br>共 15 条概念 · 4 个主题 · 持续迭代中</p>
+  <input class="search" id="search" type="text" placeholder="🔍 搜索概念、别名、一句话说明…">
+  <div id="results"></div>
+</div>
+<div class="sec-title">主题</div>
+<div class="grid"><a class="card" href="topics/ai.html"><h3>AI / 大模型</h3><p>大模型、Token、RAG、Agent 与算力落地 · 6 条</p></a><a class="card" href="topics/cloud.html"><h3>云计算</h3><p>云分层、MaaS、GPU 云与私有化部署 · 4 条</p></a><a class="card" href="topics/sales.html"><h3>销售 / GTM</h3><p>大客户销售的方法、术语与销售漏斗 · 3 条</p></a><a class="card" href="topics/business.html"><h3>商业 / 其他</h3><p>商业指标与日常遇到的陌生词 · 2 条</p></a></div>
+<div class="sec-title">最近更新</div>
+
+  <a class="result" href="concepts/agent.html">
+    <div class="t">Agent (智能体)</div>
+    <div class="s">能自己拆任务、调工具、分几步把一件事做完的 AI,比"聊天机器人"进了一步。</div>
+  </a>
+  <a class="result" href="concepts/fine-tuning.html">
+    <div class="t">微调 (Fine-tuning)</div>
+    <div class="s">用你自己的少量数据,给通用大模型"补课",让它更懂你的行业。</div>
+  </a>
+  <a class="result" href="concepts/llm.html">
+    <div class="t">大模型 (LLM)</div>
+    <div class="s">用海量文字"喂"出来、能像人一样理解和生成语言的 AI,是近两年 AI 热潮的主角。</div>
+  </a>
+  <a class="result" href="concepts/rag.html">
+    <div class="t">RAG (检索增强生成)</div>
+    <div class="s">让大模型回答前先"翻你公司的资料库",再作答,防止它凭空胡编。</div>
+  </a>
+  <a class="result" href="concepts/token.html">
+    <div class="t">Token</div>
+    <div class="s">AI 处理文字的"最小计量单位",也是你按用量付钱的方式(约 1 汉字 ≈ 1~2 Token,1 英文单词 ≈ 1~2 Token)。</div>
+  </a>
+  <a class="result" href="concepts/training-vs-inference.html">
+    <div class="t">训练与推理</div>
+    <div class="s">训练 = 教模型(贵,要海量算力);推理 = 用模型(便宜,每次调用都有成本)。两者都吃 GPU。</div>
+  </a>
+  <a class="result" href="concepts/gpu-cloud.html">
+    <div class="t">GPU 云 / 算力租赁</div>
+    <div class="s">在云端按小时/按卡租 GPU(英伟达或国产芯片),用来训练或跑大模型。</div>
+  </a>
+  <a class="result" href="concepts/iaas-paas-saas.html">
+    <div class="t">IaaS / PaaS / SaaS</div>
+    <div class="s">云服务按"你管多少、云管多少"分三层:租服务器(IaaS)、租平台(PaaS)、租成品软件(SaaS)。</div>
+  </a>
+<script>
+const idx = null;
+fetch('index.json').then(r=>r.json()).then(data=>{
+  const box=document.getElementById('search'), res=document.getElementById('results');
+  box.addEventListener('input',()=>{
+    const q=box.value.trim().toLowerCase();
+    if(!q){res.innerHTML='';return;}
+    const hits=data.filter(c=>[c.name,...(c.aliases||[]),c.summary].join(' ').toLowerCase().includes(q)).slice(0,12);
+    res.innerHTML=hits.map(c=>'<a class="result" href="concepts/'+c.slug+'.html"><div class="t">'+c.name+'</div><div class="s">'+c.summary+'</div></a>').join('')||'<div class="meta">无结果</div>';
+  });
+});
+</script></main>
+<footer class="wrap foot">由 <code>scripts/build.mjs</code> 生成 · 更新于 2026-08-24 · 个人学习用</footer>
+</body></html>

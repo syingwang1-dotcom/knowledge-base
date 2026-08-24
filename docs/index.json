@@ -1,0 +1,187 @@
+[
+  {
+    "name": "Agent (智能体)",
+    "aliases": [
+      "AI智能体",
+      "智能体"
+    ],
+    "slug": "agent",
+    "topic": "ai",
+    "topicLabel": "AI / 大模型",
+    "summary": "能自己拆任务、调工具、分几步把一件事做完的 AI,比\"聊天机器人\"进了一步。"
+  },
+  {
+    "name": "微调 (Fine-tuning)",
+    "aliases": [
+      "微调",
+      "Fine-tuning",
+      "精调"
+    ],
+    "slug": "fine-tuning",
+    "topic": "ai",
+    "topicLabel": "AI / 大模型",
+    "summary": "用你自己的少量数据,给通用大模型\"补课\",让它更懂你的行业。"
+  },
+  {
+    "name": "大模型 (LLM)",
+    "aliases": [
+      "大语言模型",
+      "大模型",
+      "LLM"
+    ],
+    "slug": "llm",
+    "topic": "ai",
+    "topicLabel": "AI / 大模型",
+    "summary": "用海量文字\"喂\"出来、能像人一样理解和生成语言的 AI,是近两年 AI 热潮的主角。"
+  },
+  {
+    "name": "RAG (检索增强生成)",
+    "aliases": [
+      "检索增强生成",
+      "知识库检索"
+    ],
+    "slug": "rag",
+    "topic": "ai",
+    "topicLabel": "AI / 大模型",
+    "summary": "让大模型回答前先\"翻你公司的资料库\",再作答,防止它凭空胡编。"
+  },
+  {
+    "name": "Token",
+    "aliases": [
+      "令牌",
+      "词元"
+    ],
+    "slug": "token",
+    "topic": "ai",
+    "topicLabel": "AI / 大模型",
+    "summary": "AI 处理文字的\"最小计量单位\",也是你按用量付钱的方式(约 1 汉字 ≈ 1~2 Token,1 英文单词 ≈ 1~2 Token)。"
+  },
+  {
+    "name": "训练与推理",
+    "aliases": [
+      "训练",
+      "推理",
+      "Training",
+      "Inference"
+    ],
+    "slug": "training-vs-inference",
+    "topic": "ai",
+    "topicLabel": "AI / 大模型",
+    "summary": "训练 = 教模型(贵,要海量算力);推理 = 用模型(便宜,每次调用都有成本)。两者都吃 GPU。"
+  },
+  {
+    "name": "GPU 云 / 算力租赁",
+    "aliases": [
+      "GPU云",
+      "算力租赁",
+      "算力",
+      "AI云"
+    ],
+    "slug": "gpu-cloud",
+    "topic": "cloud",
+    "topicLabel": "云计算",
+    "summary": "在云端按小时/按卡租 GPU(英伟达或国产芯片),用来训练或跑大模型。"
+  },
+  {
+    "name": "IaaS / PaaS / SaaS",
+    "aliases": [
+      "云三层",
+      "IaaS",
+      "PaaS",
+      "SaaS",
+      "基础设施即服务"
+    ],
+    "slug": "iaas-paas-saas",
+    "topic": "cloud",
+    "topicLabel": "云计算",
+    "summary": "云服务按\"你管多少、云管多少\"分三层:租服务器(IaaS)、租平台(PaaS)、租成品软件(SaaS)。"
+  },
+  {
+    "name": "MaaS (模型即服务)",
+    "aliases": [
+      "Model as a Service",
+      "模型即服务"
+    ],
+    "slug": "maas",
+    "topic": "cloud",
+    "topicLabel": "云计算",
+    "summary": "把大模型当\"自来水\"卖——不卖模型本身,按你的使用量(调用/Token)收费。"
+  },
+  {
+    "name": "私有化部署 / 一体机",
+    "aliases": [
+      "私有化部署",
+      "私有化",
+      "一体机",
+      "本地化部署"
+    ],
+    "slug": "private-deployment",
+    "topic": "cloud",
+    "topicLabel": "云计算",
+    "summary": "把模型装进客户自己的机房(或软硬件打包成一台\"一体机\"交货),数据不出门。"
+  },
+  {
+    "name": "KA 大客户",
+    "aliases": [
+      "大客户",
+      "Key Account",
+      "大客户销售"
+    ],
+    "slug": "ka",
+    "topic": "sales",
+    "topicLabel": "销售 / GTM",
+    "summary": "Key Account,指少数几个\"顶一百个小客户\"的重量级客户,由专门团队深耕。"
+  },
+  {
+    "name": "线索 / 商机 / POC",
+    "aliases": [
+      "线索",
+      "商机",
+      "POC",
+      "Lead",
+      "Opportunity",
+      "试点"
+    ],
+    "slug": "lead-opportunity-poc",
+    "topic": "sales",
+    "topicLabel": "销售 / GTM",
+    "summary": "销售漏斗的三级:线索(可能的人)→ 商机(确定的单)→ POC(先试点再签约)。"
+  },
+  {
+    "name": "SPIN 销售法",
+    "aliases": [
+      "SPIN",
+      "顾问式销售",
+      "提问式销售"
+    ],
+    "slug": "spin",
+    "topic": "sales",
+    "topicLabel": "销售 / GTM",
+    "summary": "顾问式销售四步提问法:现状(S)→ 问题(P)→ 影响(I)→ 价值(N),让客户自己得出\"该买\"的结论。"
+  },
+  {
+    "name": "飞轮效应",
+    "aliases": [
+      "飞轮",
+      "Flywheel",
+      "正循环"
+    ],
+    "slug": "flywheel",
+    "topic": "business",
+    "topicLabel": "商业 / 其他",
+    "summary": "一个\"越好越好\"的正循环:每转一圈,都让下一圈更容易、更快。"
+  },
+  {
+    "name": "LTV / 续约率 / 客单价",
+    "aliases": [
+      "LTV",
+      "续约率",
+      "客单价",
+      "客户终身价值"
+    ],
+    "slug": "ltv-renewal",
+    "topic": "business",
+    "topicLabel": "商业 / 其他",
+    "summary": "衡量\"一个客户到底值多少钱\"的三个指标:终身价值(LTV)、续约比例、单笔金额。"
+  }
+]
