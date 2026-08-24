@@ -59,29 +59,7 @@ function parseLooseJson(s) {
   return JSON.parse(t);
 }
 
-// ── 抓取文章 → 纯文本 ───────────────────────────────────
-async function fetchArticle(url) {
-  const res = await fetch(url, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
-      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.5',
-    },
-    redirect: 'follow',
-  });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  const html = await res.text();
-  let t = html
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<!--[\s\S]*?-->/g, ' ')
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/(p|div|h[1-6]|li|tr|section|article)>/gi, '\n');
-  t = t.replace(/<[^>]+>/g, ' ');
-  t = t.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
-  t = t.replace(/[ \t]+/g, ' ').replace(/\n\s*\n+/g, '\n').trim();
-  return t.slice(0, 8000);
-}
+// 注:URL 自动抓取已按用户要求暂缓(公众号/链接反爬复杂)。当前聚焦:术语 → 分类 → 解释 → 关联。
 
 // ── 调 LLM 生成词条 ────────────────────────────────────
 const SYSTEM_PROMPT = `你是「我的知识库」的词条作者。用户是零基础的技术销售新人(目标岗位:云和大模型大客户销售)。你的任务:把专业概念写成结构清晰、小白能懂、销售能用的词条。
@@ -89,7 +67,9 @@ const SYSTEM_PROMPT = `你是「我的知识库」的词条作者。用户是零
 硬性要求:
 - "大白话解释":像对一个完全不懂技术的朋友讲,可打比方,不要堆术语;
 - "销售话术版":像对客户/面试官讲,给一句可以直接说的话,体现"把技术翻译成生意价值";
-- 如果给了参考文章,以它为主要事实来源,但用自己的话写,不要摘抄长段落;
+- "topic" 四选一,务必准确:AI 技术/模型/算力 → ai;云服务/部署/云形态 → cloud;销售方法论/销售术语 → sales;商业指标/其他 → business;
+- "related" 是从已有概念中挑真正相关的 1-5 个建立关联(这是本产品区别于普通问答 AI 的核心价值,务必认真挑,只选确实相关的,不要硬凑;确实没有就空数组);
+- 如果用户给了背景说明,以它为主要事实来源,但用自己的话写,不要摘抄;
 - body 用 markdown,只允许 ## 三级以内标题、无序列表、加粗、引用,分三段:## 一句话 / ## 大白话解释 / ## 销售话术版(可再加 ## 备注);
 - 每个词条 300-600 字;
 - 只输出一个合法 JSON 对象,不要输出任何其他文字。`;
@@ -170,43 +150,30 @@ function writeConcept({ name, slug, topic, aliases, related, body, sourceUrl, so
 // ── 主流程 ──────────────────────────────────────────────
 async function main() {
   if (!TITLE.startsWith('[词条]')) { log('非词条 Issue,跳过'); return; }
-  if (!BODY) { await ghComment('请提供内容:一个陌生词,或一个文章链接/正文。'); return; }
   if (!LLM_KEY) {
     await ghComment('⚠️ 仓库未配置 `LLM_API_KEY` secret,无法自动生成词条。请管理员在仓库 Settings → Secrets and variables → Actions 添加。');
     return;
   }
 
-  const first = BODY.split('\n')[0].trim();
-  const isUrl = /^https?:\/\//i.test(first);
+  // 术语优先:标题 = [词条] 术语名;body = 可选背景说明(当前不做 URL 抓取)
   let term = TITLE.replace(/^\[词条\]\s*/, '').trim();
-  let context = '', sourceUrl = '', sourceNote = '';
-
-  if (isUrl) {
-    sourceUrl = first;
-    try {
-      context = await fetchArticle(first);
-      if (!context || context.length < 50) throw new Error('正文过短');
-      log('已抓取文章:', context.length, '字符');
-    } catch (e) {
-      await ghComment(`⚠️ 自动抓取失败(${e.message})。该网站可能反爬或需登录。请把正文直接粘贴到 Issue body 里,再重新开一个 [词条] Issue。`);
-      return;
-    }
-  } else if (BODY.length > 60) {
-    // 长文本:视为"词 + 背景资料"
-    term = term || first;
-    context = BODY;
-  } else {
-    term = BODY;
+  let context = BODY.replace(/^https?:\/\/\S+/i, '').trim();
+  if (!term && !context) {
+    await ghComment('请至少提供一个专业术语:标题用 `[词条] 术语名`,或在 body 里写术语。');
+    return;
   }
+  if (!term) term = context.split('\n')[0].trim();
+  if (term.length > 40) term = term.slice(0, 40);
+  log('术语:', term, '| 背景长度:', context.length);
 
   let c;
-  try { c = await genConcept({ term, context, sourceUrl }); }
+  try { c = await genConcept({ term, context, sourceUrl: '' }); }
   catch (e) { await ghComment(`⚠️ 生成失败:${e.message}`); return; }
 
-  const file = writeConcept({ ...c, sourceUrl, sourceNote: sourceUrl ? '' : `Issue #${NUMBER}` });
+  const file = writeConcept({ ...c, sourceUrl: '', sourceNote: `Issue #${NUMBER}` });
   log('已写入', file);
   await ghComment(
-    `✅ 已生成词条 **${c.name}**(主题:${TOPICS[c.topic]})\n\n文件:\`${file}\`\n站点链接:${SITE_URL}/concepts/${encodeURIComponent(c.slug)}.html\n\n站点会自动重建,稍后刷新即可看到。`
+    `✅ 已生成词条 **${c.name}**(主题:${TOPICS[c.topic]},已关联 ${c.related.length} 个相关概念)\n\n文件:\`${file}\`\n站点链接:${SITE_URL}/concepts/${encodeURIComponent(c.slug)}.html\n\n站点会自动重建,稍后刷新即可看到。`
   );
   await ghClose();
 }

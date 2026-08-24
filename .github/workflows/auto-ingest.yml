@@ -3,7 +3,7 @@ name: auto-ingest
 # 当仓库出现标题以 [词条] 开头的 Issue 时,自动抓取内容、调用大模型生成词条、重建站点并上线
 on:
   issues:
-    types: [opened]
+    types: [opened, reopened]
 
 permissions:
   contents: write   # 允许提交新词条并推送

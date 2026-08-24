@@ -191,6 +191,10 @@ function conceptHtml(c) {
     if (!target) return `<span class="chip">${esc(r)}</span>`;
     return `<a class="chip" href="${rel(`concepts/${target.slug}.html`)}">${esc(target.name)}</a>`;
   }).join('') || '<span class="chip" style="opacity:.5">暂无</span>';
+  const incoming = CONCEPTS.filter(x => (x.related || []).includes(c.slug));
+  const incomingHtml = incoming.length
+    ? incoming.map(x => `<a class="chip" href="../concepts/${x.slug}.html">${esc(x.name)}</a>`).join('')
+    : '<span class="chip" style="opacity:.5">暂无</span>';
   const sources = c.sources.map(s =>
     /^https?:\/\//.test(s)
       ? `<li><a href="${esc(s)}" target="_blank" rel="noopener">${esc(s)}</a></li>`
@@ -202,8 +206,10 @@ function conceptHtml(c) {
 <h1>${esc(c.name)}</h1>
 <div class="meta">收录于 ${c.created} · 更新于 ${c.updated}</div>
 ${mdToHtml(c.body)}
-<div class="sec-title">相关概念</div>
+<div class="sec-title">相关概念(我关联的)</div>
 <div class="chips">${related}</div>
+<div class="sec-title">被这些概念引用(反向关联)</div>
+<div class="chips">${incomingHtml}</div>
 <div class="sec-title">来源</div>
 <ul class="meta">${sources}</ul>`;
 }
@@ -226,26 +232,25 @@ function addHtml() {
   return `
 <div class="hero">
   <h1>➕ 添加概念</h1>
-  <p>贴一个公众号/文章链接,或写一个你听不懂的词。系统会自动抓取内容、生成词条并上线。<br>提交后浏览器会打开 GitHub 的 Issue 填写页,点一次"Create"即完成投喂。</p>
+  <p>输入一个专业术语,系统会自动<b>识别分类</b>、用你习惯的方式<b>解释</b>,并<b>自动关联</b>到已有的相关词条。<br>提交后浏览器会打开 GitHub 的 Issue 填写页,点一次"Create"即完成投喂。</p>
 </div>
-<div class="ok" style="margin-bottom:14px">✅ 全自动流程:提交 → GitHub Actions 抓取文章 → 调大模型生成词条 → 重建站点 → 自动上线(通常 1~3 分钟)。</div>
+<div class="ok" style="margin-bottom:14px">✅ 流程:提交 → GitHub Actions 调用大模型 → 自动分类 + 大白话解释 + 关联相关词条 → 站点自动更新(约 1 分钟)。</div>
 <form id="f">
-  <label for="term">要解释的词(选填,不填则自动从文章提炼最重要的概念)</label>
-  <input class="search" id="term" type="text" placeholder="例:向量数据库">
-  <label for="ctx">文章链接(以 http 开头)或粘贴正文 / 相关说明(选填)</label>
-  <textarea class="search" id="ctx" rows="5" placeholder="https://mp.weixin.qq.com/... 或直接把文字粘进来"></textarea>
+  <label for="term">专业术语(必填)</label>
+  <input class="search" id="term" type="text" placeholder="例:向量数据库、ROI、私有化部署">
+  <label for="ctx">补充背景说明(选填,直接把相关文字粘贴进来即可)</label>
+  <textarea class="search" id="ctx" rows="4" placeholder="这句话出现在什么场景、出处、上下文…"></textarea>
   <button class="btn" type="submit">🚀 提交投喂</button>
 </form>
-<p class="meta">说明:复杂页面若抓取失败,系统会在 Issue 里留言,请把正文直接粘贴到 Issue body 重新投喂。抓取成功的文章会按「保留原文」规则判断是否存档。</p>
 <script>
   const BASE='https://github.com/syingwang1-dotcom/knowledge-base/issues/new';
   document.getElementById('f').addEventListener('submit',e=>{
     e.preventDefault();
     const term=document.getElementById('term').value.trim();
     const ctx=document.getElementById('ctx').value.trim();
-    if(!term&&!ctx){ alert('请至少填一项'); return; }
-    const title='[词条] '+(term||ctx.split('\\n')[0].slice(0,40));
-    window.open(BASE+'?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(ctx),'_blank');
+    if(!term){ alert('请填写专业术语'); return; }
+    const body=ctx ? term+'\\n\\n'+ctx : term;
+    window.open(BASE+'?title='+encodeURIComponent('[词条] '+term)+'&body='+encodeURIComponent(body),'_blank');
   });
 </script>`;
 }
