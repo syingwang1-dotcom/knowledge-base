@@ -11,8 +11,7 @@ const KB = path.resolve(__dirname, '..');
 const CONCEPTS_DIR = path.join(KB, 'concepts');
 const OUT_DIR = path.join(KB, 'docs');
 const NOW = '2026-08-24';
-// Cloudflare Worker 后端地址(部署后把下方占位替换为真实 workers.dev 地址,再重跑 build.mjs)
-const WORKER_URL = 'https://kb-api.YOUR_SUBDOMAIN.workers.dev';
+// 投喂接口:Vercel 上同域 /api/add(GitHub Pages 上没有该接口,直投仅 Vercel 域名可用)
 
 // ── 主题配置 ──────────────────────────────────────────────
 const TOPICS = {
@@ -231,8 +230,12 @@ function topicHtml(topic, list) {
 
 // ── 生成"添加概念"页 ────────────────────────────────────
 function addHtml() {
-  const READY = !WORKER_URL.includes('YOUR_SUBDOMAIN');
-  const formReady = READY ? `
+  return `
+<div class="hero">
+  <h1>➕ 添加概念</h1>
+  <p>输入一个专业术语,系统会自动<b>识别分类</b>、用你习惯的方式<b>解释</b>,并<b>自动关联</b>到已有的相关词条。<br><b>全程不离开本页面</b>,提交后直接收录。</p>
+</div>
+<div class="ok" style="margin-bottom:14px">✅ 流程:提交 → 云函数调大模型 → 自动分类 + 大白话解释 + 关联相关词条 → 写入知识库 → 站点自动更新(约 1~2 分钟)。</div>
 <form id="f">
   <label for="term">专业术语(必填)</label>
   <input class="search" id="term" type="text" placeholder="例:向量数据库、ROI、私有化部署">
@@ -244,7 +247,6 @@ function addHtml() {
 </form>
 <div id="status"></div>
 <script>
-  const WORKER=${JSON.stringify(WORKER_URL)};
   (function(){const s=localStorage.getItem('kb_secret');if(s)document.getElementById('secret').value=s;})();
   document.getElementById('f').addEventListener('submit',async e=>{
     e.preventDefault();
@@ -256,7 +258,7 @@ function addHtml() {
     const st=document.getElementById('status');
     st.innerHTML='<div class="ok">⏳ 正在生成词条(自动分类+解释+关联),约需 30~60 秒,请勿关闭页面…</div>';
     try{
-      const res=await fetch(WORKER+'/api/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({term,context:ctx,secret})});
+      const res=await fetch('/api/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({term,context:ctx,secret})});
       const d=await res.json();
       if(d.ok){
         localStorage.setItem('kb_secret',secret);
@@ -266,19 +268,10 @@ function addHtml() {
         st.innerHTML='<div class="ok" style="background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.4);color:#fb7185">❌ '+d.error+'</div>';
       }
     }catch(err){
-      st.innerHTML='<div class="ok" style="background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.4);color:#fb7185">❌ 请求失败:'+err.message+'</div>';
+      st.innerHTML='<div class="ok" style="background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.4);color:#fb7185">❌ 请求失败:'+err.message+'<br><span style="font-size:13px">提示:直投接口只在 Vercel 域名可用;如果你是在 GitHub Pages 打开的,请改用 Vercel 地址。</span></div>';
     }
   });
-</script>`
-  : '<div class="ok" style="border-color:#fb923c;color:#fb923c">⚠️ 后端尚未配置:请先部署 Cloudflare Worker,再把真实地址填进 build.mjs 的 WORKER_URL 并重新生成站点。</div>';
-
-  return `
-<div class="hero">
-  <h1>➕ 添加概念</h1>
-  <p>输入一个专业术语,系统会自动<b>识别分类</b>、用你习惯的方式<b>解释</b>,并<b>自动关联</b>到已有的相关词条。<br><b>全程不离开本页面</b>,提交后直接收录。</p>
-</div>
-<div class="ok" style="margin-bottom:14px">✅ 流程:提交 → 云函数调大模型 → 自动分类 + 大白话解释 + 关联相关词条 → 写入知识库 → 站点自动更新(约 1~2 分钟)。</div>
-${formReady}`;
+</script>`;
 }
 
 // ── 生成首页 ──────────────────────────────────────────────
