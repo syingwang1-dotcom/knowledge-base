@@ -1,0 +1,53 @@
+name: auto-ingest
+
+# 当仓库出现标题以 [词条] 开头的 Issue 时,自动抓取内容、调用大模型生成词条、重建站点并上线
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write   # 允许提交新词条并推送
+  issues: write     # 允许回帖和关闭 Issue
+
+concurrency:
+  group: ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.issue.title, '[词条]')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 生成词条
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/auto-ingest.mjs
+
+      - name: 重建站点
+        run: node scripts/build.mjs
+
+      - name: 提交并推送
+        run: |
+          git config user.name "knowledge-base bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "没有新变更"
+          else
+            git commit -m "auto: 词条 from issue #${{ github.event.issue.number }}"
+            git push
+            echo "已推送新词条"
+          fi

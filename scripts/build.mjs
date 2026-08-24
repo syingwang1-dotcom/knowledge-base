@@ -124,13 +124,18 @@ blockquote{border-left:3px solid var(--accent);background:var(--card);padding:10
 .result .s{color:var(--muted);font-size:13px;margin-top:2px}
 .sec-title{font-size:18px;font-weight:600;margin:26px 0 12px}
 .foot{color:var(--muted);font-size:13px;padding:20px 0 40px;border-top:1px solid var(--border)}
+textarea.search{height:auto;resize:vertical;font-family:inherit}
+.btn{display:inline-block;padding:10px 24px;border-radius:10px;border:0;background:var(--accent);color:#0b1220;font-weight:600;font-size:15px;cursor:pointer;margin-top:6px}
+.btn:hover{opacity:.9}
+label{color:var(--muted);font-size:14px;display:block;margin:14px 0 4px}
+.ok{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.4);color:var(--green);padding:12px 16px;border-radius:10px;font-size:14px}
 `;
 
 // ── 页面壳 ────────────────────────────────────────────────
 function navHtml(prefix, active) {
-  const items = [['', '首页'], ...Object.entries(TOPICS).map(([k, v]) => [k, v.label])];
+  const items = [['', '首页'], ...Object.entries(TOPICS).map(([k, v]) => [k, v.label]), ['add', '➕ 添加']];
   return items.map(([k, label]) =>
-    `<a class="${k === active ? 'active' : ''}" href="${prefix}${k === '' ? 'index.html' : `topics/${k}.html`}">${label}</a>`
+    `<a class="${k === active ? 'active' : ''}" href="${prefix}${k === '' ? 'index.html' : k === 'add' ? 'add.html' : `topics/${k}.html`}">${label}</a>`
   ).join('');
 }
 
@@ -216,6 +221,35 @@ function topicHtml(topic, list) {
 <div class="grid">${cards}</div>`;
 }
 
+// ── 生成"添加概念"页 ────────────────────────────────────
+function addHtml() {
+  return `
+<div class="hero">
+  <h1>➕ 添加概念</h1>
+  <p>贴一个公众号/文章链接,或写一个你听不懂的词。系统会自动抓取内容、生成词条并上线。<br>提交后浏览器会打开 GitHub 的 Issue 填写页,点一次"Create"即完成投喂。</p>
+</div>
+<div class="ok" style="margin-bottom:14px">✅ 全自动流程:提交 → GitHub Actions 抓取文章 → 调大模型生成词条 → 重建站点 → 自动上线(通常 1~3 分钟)。</div>
+<form id="f">
+  <label for="term">要解释的词(选填,不填则自动从文章提炼最重要的概念)</label>
+  <input class="search" id="term" type="text" placeholder="例:向量数据库">
+  <label for="ctx">文章链接(以 http 开头)或粘贴正文 / 相关说明(选填)</label>
+  <textarea class="search" id="ctx" rows="5" placeholder="https://mp.weixin.qq.com/... 或直接把文字粘进来"></textarea>
+  <button class="btn" type="submit">🚀 提交投喂</button>
+</form>
+<p class="meta">说明:复杂页面若抓取失败,系统会在 Issue 里留言,请把正文直接粘贴到 Issue body 重新投喂。抓取成功的文章会按「保留原文」规则判断是否存档。</p>
+<script>
+  const BASE='https://github.com/syingwang1-dotcom/knowledge-base/issues/new';
+  document.getElementById('f').addEventListener('submit',e=>{
+    e.preventDefault();
+    const term=document.getElementById('term').value.trim();
+    const ctx=document.getElementById('ctx').value.trim();
+    if(!term&&!ctx){ alert('请至少填一项'); return; }
+    const title='[词条] '+(term||ctx.split('\\n')[0].slice(0,40));
+    window.open(BASE+'?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(ctx),'_blank');
+  });
+</script>`;
+}
+
 // ── 生成首页 ──────────────────────────────────────────────
 function indexHtml(concepts) {
   const topicCards = Object.entries(TOPICS).map(([k, v]) => {
@@ -232,6 +266,7 @@ function indexHtml(concepts) {
 <div class="hero">
   <h1>📚 我的知识库</h1>
   <p>把播客、报道里听不懂的词,变成我能讲给客户听的话。<br>共 ${concepts.length} 条概念 · ${Object.keys(TOPICS).length} 个主题 · 持续迭代中</p>
+  <p><a class="btn" href="add.html">➕ 添加新概念</a></p>
   <input class="search" id="search" type="text" placeholder="🔍 搜索概念、别名、一句话说明…">
   <div id="results"></div>
 </div>
@@ -282,6 +317,7 @@ for (const t of Object.keys(TOPICS)) {
     page(TOPICS[t].label, '../', t, topicHtml(t, list)));
 }
 fs.writeFileSync(path.join(OUT_DIR, 'index.html'), page('首页', '', '', indexHtml(CONCEPTS)));
+fs.writeFileSync(path.join(OUT_DIR, 'add.html'), page('添加概念', '', '', addHtml()));
 fs.writeFileSync(path.join(OUT_DIR, 'index.json'), JSON.stringify(buildIndex(CONCEPTS), null, 2));
 
 console.log(`✅ 生成完成:${CONCEPTS.length} 条概念 → ${OUT_DIR}`);

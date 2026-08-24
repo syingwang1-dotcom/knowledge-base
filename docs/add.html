@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>飞轮效应 · 我的知识库</title><style>
+<title>添加概念 · 我的知识库</title><style>
 :root{--bg:#0f1115;--card:#171a22;--card2:#1d212c;--text:#e5e7eb;--muted:#9aa3b2;--accent:#60a5fa;--green:#34d399;--orange:#fb923c;--border:#262b38;--radius:12px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7;font-size:16px}
@@ -51,17 +51,33 @@ label{color:var(--muted);font-size:14px;display:block;margin:14px 0 4px}
 </style></head>
 <body>
 <header class="sitehead"><div class="wrap head">
-  <a class="brand" href="../../index.html">📚 我的知识库</a>
-  <nav class="nav"><a class="" href="../../index.html">首页</a><a class="" href="../../topics/ai.html">AI / 大模型</a><a class="" href="../../topics/cloud.html">云计算</a><a class="" href="../../topics/sales.html">销售 / GTM</a><a class="active" href="../../topics/business.html">商业 / 其他</a><a class="" href="../../add.html">➕ 添加</a></nav>
+  <a class="brand" href="index.html">📚 我的知识库</a>
+  <nav class="nav"><a class="active" href="index.html">首页</a><a class="" href="topics/ai.html">AI / 大模型</a><a class="" href="topics/cloud.html">云计算</a><a class="" href="topics/sales.html">销售 / GTM</a><a class="" href="topics/business.html">商业 / 其他</a><a class="" href="add.html">➕ 添加</a></nav>
 </div></header>
 <main class="wrap">
-<div class="chips"><a class="chip topic" href="../../topics/business.html">商业 / 其他</a><span class="chip">飞轮</span><span class="chip">Flywheel</span><span class="chip">正循环</span></div>
-<h1>飞轮效应</h1>
-<div class="meta">收录于 2026-08-24 · 更新于 2026-08-24</div>
-<h2>一句话</h2><p>一个"越好越好"的正循环:每转一圈,都让下一圈更容易、更快。</p><h2>大白话解释</h2><ul><li>亚马逊的飞轮:低价 → 更多客户 → 更多商家 → 规模成本更低 → 更低价格 → 循环;</li><li>百度 AI 的飞轮:模型好用 → 客户多用 → 更多数据和收入 → 模型更好 → 更多人用;</li><li>财报里"AI 收入占比 50%,进入规模化变现",说的就是飞轮转起来了。</li></ul><h2>销售话术版</h2><p>讲战略高度、拉高对话层次:</p><blockquote>我们不是卖一次产品,是让客户进入一个正循环——数据越多越懂你,越懂你价值越大。这就是为什么 AI 生意越做越有壁垒。</blockquote><p>——面试谈到"长期主义"时用得上。</p><h2>备注</h2><p>识别"飞轮"的方法:问一句"这个循环里,哪一个动作会让下一个动作更容易?"答得出来的就是飞轮。</p>
-<div class="sec-title">相关概念</div>
-<div class="chips"><a class="chip" href="../concepts/llm.html">大模型 (LLM)</a></div>
-<div class="sec-title">来源</div>
-<ul class="meta"><li><a href="https://mp.weixin.qq.com/s/2i6hrJ5a4PCKPUw9fORBgg" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/2i6hrJ5a4PCKPUw9fORBgg</a></li></ul></main>
+<div class="hero">
+  <h1>➕ 添加概念</h1>
+  <p>贴一个公众号/文章链接,或写一个你听不懂的词。系统会自动抓取内容、生成词条并上线。<br>提交后浏览器会打开 GitHub 的 Issue 填写页,点一次"Create"即完成投喂。</p>
+</div>
+<div class="ok" style="margin-bottom:14px">✅ 全自动流程:提交 → GitHub Actions 抓取文章 → 调大模型生成词条 → 重建站点 → 自动上线(通常 1~3 分钟)。</div>
+<form id="f">
+  <label for="term">要解释的词(选填,不填则自动从文章提炼最重要的概念)</label>
+  <input class="search" id="term" type="text" placeholder="例:向量数据库">
+  <label for="ctx">文章链接(以 http 开头)或粘贴正文 / 相关说明(选填)</label>
+  <textarea class="search" id="ctx" rows="5" placeholder="https://mp.weixin.qq.com/... 或直接把文字粘进来"></textarea>
+  <button class="btn" type="submit">🚀 提交投喂</button>
+</form>
+<p class="meta">说明:复杂页面若抓取失败,系统会在 Issue 里留言,请把正文直接粘贴到 Issue body 重新投喂。抓取成功的文章会按「保留原文」规则判断是否存档。</p>
+<script>
+  const BASE='https://github.com/syingwang1-dotcom/knowledge-base/issues/new';
+  document.getElementById('f').addEventListener('submit',e=>{
+    e.preventDefault();
+    const term=document.getElementById('term').value.trim();
+    const ctx=document.getElementById('ctx').value.trim();
+    if(!term&&!ctx){ alert('请至少填一项'); return; }
+    const title='[词条] '+(term||ctx.split('\n')[0].slice(0,40));
+    window.open(BASE+'?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(ctx),'_blank');
+  });
+</script></main>
 <footer class="wrap foot">由 <code>scripts/build.mjs</code> 生成 · 更新于 2026-08-24 · 个人学习用</footer>
 </body></html>
