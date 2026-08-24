@@ -11,6 +11,8 @@ const KB = path.resolve(__dirname, '..');
 const CONCEPTS_DIR = path.join(KB, 'concepts');
 const OUT_DIR = path.join(KB, 'docs');
 const NOW = '2026-08-24';
+// Cloudflare Worker 后端地址(部署后把下方占位替换为真实 workers.dev 地址,再重跑 build.mjs)
+const WORKER_URL = 'https://kb-api.YOUR_SUBDOMAIN.workers.dev';
 
 // ── 主题配置 ──────────────────────────────────────────────
 const TOPICS = {
@@ -229,30 +231,54 @@ function topicHtml(topic, list) {
 
 // ── 生成"添加概念"页 ────────────────────────────────────
 function addHtml() {
-  return `
-<div class="hero">
-  <h1>➕ 添加概念</h1>
-  <p>输入一个专业术语,系统会自动<b>识别分类</b>、用你习惯的方式<b>解释</b>,并<b>自动关联</b>到已有的相关词条。<br>提交后浏览器会打开 GitHub 的 Issue 填写页,点一次"Create"即完成投喂。</p>
-</div>
-<div class="ok" style="margin-bottom:14px">✅ 流程:提交 → GitHub Actions 调用大模型 → 自动分类 + 大白话解释 + 关联相关词条 → 站点自动更新(约 1 分钟)。</div>
+  const READY = !WORKER_URL.includes('YOUR_SUBDOMAIN');
+  const formReady = READY ? `
 <form id="f">
   <label for="term">专业术语(必填)</label>
   <input class="search" id="term" type="text" placeholder="例:向量数据库、ROI、私有化部署">
   <label for="ctx">补充背景说明(选填,直接把相关文字粘贴进来即可)</label>
   <textarea class="search" id="ctx" rows="4" placeholder="这句话出现在什么场景、出处、上下文…"></textarea>
-  <button class="btn" type="submit">🚀 提交投喂</button>
+  <label for="secret">投喂口令(首次填写后自动记住)</label>
+  <input class="search" id="secret" type="password" placeholder="你自选的口令,防陌生人投喂">
+  <button class="btn" type="submit">🚀 直接收录</button>
 </form>
+<div id="status"></div>
 <script>
-  const BASE='https://github.com/syingwang1-dotcom/knowledge-base/issues/new';
-  document.getElementById('f').addEventListener('submit',e=>{
+  const WORKER=${JSON.stringify(WORKER_URL)};
+  (function(){const s=localStorage.getItem('kb_secret');if(s)document.getElementById('secret').value=s;})();
+  document.getElementById('f').addEventListener('submit',async e=>{
     e.preventDefault();
     const term=document.getElementById('term').value.trim();
     const ctx=document.getElementById('ctx').value.trim();
-    if(!term){ alert('请填写专业术语'); return; }
-    const body=ctx ? term+'\\n\\n'+ctx : term;
-    window.open(BASE+'?title='+encodeURIComponent('[词条] '+term)+'&body='+encodeURIComponent(body),'_blank');
+    const secret=document.getElementById('secret').value.trim();
+    if(!term){alert('请填写专业术语');return;}
+    if(!secret){alert('请填写投喂口令');return;}
+    const st=document.getElementById('status');
+    st.innerHTML='<div class="ok">⏳ 正在生成词条(自动分类+解释+关联),约需 30~60 秒,请勿关闭页面…</div>';
+    try{
+      const res=await fetch(WORKER+'/api/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({term,context:ctx,secret})});
+      const d=await res.json();
+      if(d.ok){
+        localStorage.setItem('kb_secret',secret);
+        st.innerHTML='<div class="ok">✅ 已收录 <b>'+d.name+'</b>('+d.topicLabel+',已关联 '+d.related+' 个概念)。站点正在自动重建,1~2 分钟后刷新首页即可看到。<br><a href="'+d.url+'">立即查看词条 →</a></div>';
+        document.getElementById('term').value='';document.getElementById('ctx').value='';
+      } else {
+        st.innerHTML='<div class="ok" style="background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.4);color:#fb7185">❌ '+d.error+'</div>';
+      }
+    }catch(err){
+      st.innerHTML='<div class="ok" style="background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.4);color:#fb7185">❌ 请求失败:'+err.message+'</div>';
+    }
   });
-</script>`;
+</script>`
+  : '<div class="ok" style="border-color:#fb923c;color:#fb923c">⚠️ 后端尚未配置:请先部署 Cloudflare Worker,再把真实地址填进 build.mjs 的 WORKER_URL 并重新生成站点。</div>';
+
+  return `
+<div class="hero">
+  <h1>➕ 添加概念</h1>
+  <p>输入一个专业术语,系统会自动<b>识别分类</b>、用你习惯的方式<b>解释</b>,并<b>自动关联</b>到已有的相关词条。<br><b>全程不离开本页面</b>,提交后直接收录。</p>
+</div>
+<div class="ok" style="margin-bottom:14px">✅ 流程:提交 → 云函数调大模型 → 自动分类 + 大白话解释 + 关联相关词条 → 写入知识库 → 站点自动更新(约 1~2 分钟)。</div>
+${formReady}`;
 }
 
 // ── 生成首页 ──────────────────────────────────────────────

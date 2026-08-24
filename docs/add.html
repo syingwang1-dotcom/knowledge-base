@@ -57,26 +57,9 @@ label{color:var(--muted);font-size:14px;display:block;margin:14px 0 4px}
 <main class="wrap">
 <div class="hero">
   <h1>➕ 添加概念</h1>
-  <p>输入一个专业术语,系统会自动<b>识别分类</b>、用你习惯的方式<b>解释</b>,并<b>自动关联</b>到已有的相关词条。<br>提交后浏览器会打开 GitHub 的 Issue 填写页,点一次"Create"即完成投喂。</p>
+  <p>输入一个专业术语,系统会自动<b>识别分类</b>、用你习惯的方式<b>解释</b>,并<b>自动关联</b>到已有的相关词条。<br><b>全程不离开本页面</b>,提交后直接收录。</p>
 </div>
-<div class="ok" style="margin-bottom:14px">✅ 流程:提交 → GitHub Actions 调用大模型 → 自动分类 + 大白话解释 + 关联相关词条 → 站点自动更新(约 1 分钟)。</div>
-<form id="f">
-  <label for="term">专业术语(必填)</label>
-  <input class="search" id="term" type="text" placeholder="例:向量数据库、ROI、私有化部署">
-  <label for="ctx">补充背景说明(选填,直接把相关文字粘贴进来即可)</label>
-  <textarea class="search" id="ctx" rows="4" placeholder="这句话出现在什么场景、出处、上下文…"></textarea>
-  <button class="btn" type="submit">🚀 提交投喂</button>
-</form>
-<script>
-  const BASE='https://github.com/syingwang1-dotcom/knowledge-base/issues/new';
-  document.getElementById('f').addEventListener('submit',e=>{
-    e.preventDefault();
-    const term=document.getElementById('term').value.trim();
-    const ctx=document.getElementById('ctx').value.trim();
-    if(!term){ alert('请填写专业术语'); return; }
-    const body=ctx ? term+'\n\n'+ctx : term;
-    window.open(BASE+'?title='+encodeURIComponent('[词条] '+term)+'&body='+encodeURIComponent(body),'_blank');
-  });
-</script></main>
+<div class="ok" style="margin-bottom:14px">✅ 流程:提交 → 云函数调大模型 → 自动分类 + 大白话解释 + 关联相关词条 → 写入知识库 → 站点自动更新(约 1~2 分钟)。</div>
+<div class="ok" style="border-color:#fb923c;color:#fb923c">⚠️ 后端尚未配置:请先部署 Cloudflare Worker,再把真实地址填进 build.mjs 的 WORKER_URL 并重新生成站点。</div></main>
 <footer class="wrap foot">由 <code>scripts/build.mjs</code> 生成 · 更新于 2026-08-24 · 个人学习用</footer>
 </body></html>

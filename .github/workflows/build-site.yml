@@ -1,0 +1,40 @@
+name: build-site
+
+# 任何 push 到 main 后,自动用 build.mjs 重建站点并提交 docs/(Cloudflare Worker 写词条后靠这个让网站上线)
+# 注意:用 GITHUB_TOKEN 的 push 不会再次触发本工作流,不会死循环
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-site
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 重建站点
+        run: node scripts/build.mjs
+
+      - name: 提交变更(如有)
+        run: |
+          git config user.name "knowledge-base bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add docs/
+          if git diff --cached --quiet; then
+            echo "docs 无变化"
+          else
+            git commit -m "build: 重建站点"
+            git push
+            echo "已推送重建后的站点"
+          fi
